@@ -9,6 +9,7 @@ urlpatterns = [
     path('account/signup', views.signup, name='signup'),
     path('account/login', views.login, name='login'),
     path('account/logout', views.logout, name='logout'),
+    path('rankings', views.rankings, name='rankings'),
     path('api/scores', ScoreViewSet.as_view()),
     path('api/games', GameViewSet.as_view())
 ]

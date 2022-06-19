@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="container-fluid">
+    <h5 class="mb-3">Ranking:</h5>
+
+    <form action="{% url 'rankings' %}" method="GET">
+        <select class="form-select mb-3" name="game">
+            {% for game in games %}
+                {% if game == selected_game %}
+                    <option value="{{game.game_tag}}" selected>{{game.game_name}}</option>
+                {% else %}
+                    <option value="{{game.game_tag}}">{{game.game_name}}</option>
+                {% endif%}
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary mb-3">Apply</button>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Position</th>
+              <th scope="col">Username</th>
+              <th scope="col">Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for score in scores %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{score.user__username}}</td>
+                    <td>{{score.score}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}
