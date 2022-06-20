@@ -9,7 +9,7 @@ class GameDisplay(admin.ModelAdmin):
     list_per_page = 10
 
 class ScoreDisplay(admin.ModelAdmin):
-    list_display = ('id', 'user','game', 'score')
+    list_display = ('id', 'user','game', 'score','date')
     list_display_links = ('id', 'user','game', 'score')
     list_per_page = 10
 

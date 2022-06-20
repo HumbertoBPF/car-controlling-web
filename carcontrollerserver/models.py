@@ -1,3 +1,5 @@
+from datetime import datetime
+from tkinter.tix import Tree
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -13,3 +15,4 @@ class Score(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     score = models.IntegerField() 
+    date = models.DateTimeField(default=datetime.now, blank=True, null=True)
