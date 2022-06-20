@@ -14,6 +14,7 @@ urlpatterns = [
     path('account/delete', views.delete_account, name='delete-account'),
     path('account/update-form', views.update_account_form, name='update-account-form'),
     path('account/update', views.update_account, name='update-account'),
+    path('account/change-picture', views.change_picture, name='change-picture'),
     path('api/scores', ScoreViewSet.as_view()),
     path('api/games', GameViewSet.as_view())
 ]

@@ -1,10 +1,11 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
+from application.forms import FormPicture
 from application.utils import contains_parameters
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.db.models import Min
-from carcontrollerserver.models import Game, Score
+from carcontrollerserver.models import AppUser, Game, Score
 from django.contrib.auth.hashers import make_password
 
 # Create your views here.
@@ -52,6 +53,8 @@ def signup(request):
             else:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
+                app_user = AppUser(user = user)
+                app_user.save()
                 messages.success(request, "Account successfully created")
             return redirect('signup-form')
     return redirect('dashboard')
@@ -75,7 +78,7 @@ def rankings(request):
     return redirect('dashboard')
 
 def profile(request):
-    if request.method == "GET":
+    if request.method == "GET" and request.user.is_authenticated:
         if contains_parameters(request.GET, "game") and request.GET.get('game') != "all_games":
             game = get_object_or_404(Game, game_tag = request.GET.get('game'))
             scores = Score.objects.filter(game=game, user=request.user)
@@ -84,7 +87,15 @@ def profile(request):
             scores = Score.objects.filter(user=request.user)
         # List of all the games for the select field of the form
         games = Game.objects.all()
-        return render(request, 'profile.html', {'scores': scores, 'games': games, 'selected_game': game})
+        app_user = get_object_or_404(AppUser, user=request.user)
+        form_picture = FormPicture()
+        return render(request, 'profile.html', {
+                                                'scores': scores, 
+                                                'games': games, 
+                                                'selected_game': game, 
+                                                'app_user': app_user,
+                                                'form_picture': form_picture
+                                            })
     return redirect('login-form')
 
 def delete_account(request):
@@ -127,4 +138,13 @@ def update_account(request):
                     auth.login(request, user)
                 return redirect('profile')
             return redirect('update-account-form')
+    return redirect('profile')
+
+def change_picture(request):
+    if request.method == "POST" and request.user.is_authenticated:
+        form_picture = FormPicture(request.POST, request.FILES)
+        if form_picture.is_valid():
+            app_user = get_object_or_404(AppUser, user = request.user)
+            app_user.picture = form_picture.cleaned_data.get('picture')
+            app_user.save()
     return redirect('profile')

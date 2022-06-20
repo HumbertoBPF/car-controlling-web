@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from carcontrollerserver.models import Game, Score
+from carcontrollerserver.models import AppUser, Game, Score
 
 class GameDisplay(admin.ModelAdmin):
     list_display = ('id', 'game_name','game_tag')
@@ -13,6 +13,12 @@ class ScoreDisplay(admin.ModelAdmin):
     list_display_links = ('id', 'user','game', 'score')
     list_per_page = 10
 
+class AppUserDisplay(admin.ModelAdmin):
+    list_display = ('id', 'user')
+    list_display_links = ('id', 'user')
+    list_per_page = 10
+
 # Register your models here.
 admin.site.register(Game, GameDisplay)
 admin.site.register(Score, ScoreDisplay)
+admin.site.register(AppUser, AppUserDisplay)
