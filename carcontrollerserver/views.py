@@ -7,6 +7,7 @@ from django.contrib import auth
 from django.db.models import Min
 from carcontrollerserver.models import AppUser, Game, Score
 from django.contrib.auth.hashers import make_password
+from carcontrollerserver.validators import is_valid_user_data
 
 # Create your views here.
 def dashboard(request):
@@ -37,25 +38,16 @@ def signup(request):
             email = request.POST.get('email')
             username = request.POST.get('username')
             password = request.POST.get('password')
-            password_confirmation = request.POST.get('password')
-            if (" " in email) or (" " in username) or (" " in password):
-                messages.error(request, "Fields cannot contain spaces")
-            elif (len(email) == 0) or (len(username) == 0):
-                messages.error(request, "All fields are required")
-            elif User.objects.filter(username=username).exists():
-                messages.error(request, "This username is not available")
-            elif User.objects.filter(email=email).exists():
-                messages.error(request, "This email is not available")
-            elif len(password) < 6 or len(password) > 30:
-                messages.error(request, "Password length out of range(passwords must be 6 and 30 characters long)")
-            elif password != password_confirmation:
-                messages.error(request, "The passwords do not match")
-            else:
+            password_confirmation = request.POST.get('password_confirmation')
+            is_valid_data, error_msg = is_valid_user_data(email, username, password, password_confirmation)[0:2]
+            if is_valid_data:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
                 app_user = AppUser(user = user)
                 app_user.save()
                 messages.success(request, "Account successfully created")
+            else:
+                messages.error(request, error_msg)
             return redirect('signup-form')
     return redirect('dashboard')
 
@@ -114,20 +106,9 @@ def update_account(request):
             email = request.POST.get('email')
             username = request.POST.get('username')
             password = request.POST.get('password')
-            password_confirmation = request.POST.get('password')
-            if (" " in email) or (" " in username) or (" " in password):
-                messages.error(request, "Fields cannot contain spaces")
-            elif (len(email) == 0) or (len(username) == 0):
-                messages.error(request, "All fields are required")
-            elif request.user.username != username and User.objects.filter(username=username).exists():
-                messages.error(request, "This username is not available")
-            elif email!=request.user.email and User.objects.filter(email=email).exists():
-                messages.error(request, "This email is not available")
-            elif len(password) < 6 or len(password) > 30:
-                messages.error(request, "Password length out of range(passwords must be 6 and 30 characters long)")
-            elif password != password_confirmation:
-                messages.error(request, "The passwords do not match")
-            else:
+            password_confirmation = request.POST.get('password_confirmation')
+            is_valid_data, error_msg = is_valid_user_data(email, username, password, password_confirmation, existing_user=request.user)[0:2]
+            if is_valid_data:
                 request.user.email = email
                 request.user.username = username
                 request.user.password = make_password(password)
@@ -137,6 +118,8 @@ def update_account(request):
                 if user is not None:
                     auth.login(request, user)
                 return redirect('profile')
+            else:
+                messages.error(request, error_msg)
             return redirect('update-account-form')
     return redirect('profile')
 

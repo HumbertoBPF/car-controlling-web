@@ -1,6 +1,6 @@
-from carcontrollerserver.viewsets import GameViewSet, ScoreViewSet
+from carcontrollerserver.viewsets import GameViewSet, ScoreViewSet, UserViewSet
 from . import views
-from django.urls import path, include
+from django.urls import path
 
 urlpatterns = [
     path('dashboard', views.dashboard, name='dashboard'),
@@ -16,5 +16,6 @@ urlpatterns = [
     path('account/update', views.update_account, name='update-account'),
     path('account/change-picture', views.change_picture, name='change-picture'),
     path('api/scores', ScoreViewSet.as_view()),
-    path('api/games', GameViewSet.as_view())
+    path('api/games', GameViewSet.as_view()),
+    path('api/users', UserViewSet.as_view())
 ]
