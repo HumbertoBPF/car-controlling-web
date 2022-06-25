@@ -4,14 +4,9 @@ from application.forms import FormPicture
 from application.utils import contains_parameters
 from django.contrib.auth.models import User
 from django.contrib import auth
-from django.db.models import Min
 from carcontrollerserver.models import AppUser, Game, Score
 from django.contrib.auth.hashers import make_password
 from carcontrollerserver.validators import is_valid_user_data
-
-# Create your views here.
-def dashboard(request):
-    return render(request, 'index.html')
 
 def signup_form(request):
     return render(request, 'signup_form.html')
@@ -54,19 +49,6 @@ def signup(request):
 def logout(request):
     if request.user.is_authenticated:
         auth.logout(request)
-    return redirect('dashboard')
-
-def rankings(request):
-    if request.method == "GET":
-        if contains_parameters(request.GET, "game"):
-            game = get_object_or_404(Game, game_tag = request.GET.get('game'))
-        else:
-            game = Game.objects.first()
-        # Return the best score of each player for the selected game
-        scores = Score.objects.filter(game=game).values('user__username','game').annotate(score=Min('score')).order_by('score')
-        # List of all the games for the select field of the form
-        games = Game.objects.all()
-        return render(request, 'rankings.html', {'scores': scores, 'games': games, 'selected_game': game})
     return redirect('dashboard')
 
 def profile(request):
