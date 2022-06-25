@@ -1,4 +1,4 @@
-from carcontrollerserver.viewsets import GameViewSet, ScoreViewSet, UserViewSet
+from .views.viewsets import GameViewSet, ScoreViewSet, UserViewSet
 from .views import general, account
 from django.urls import path
 

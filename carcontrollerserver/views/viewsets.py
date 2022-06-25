@@ -1,4 +1,3 @@
-from functools import partial
 from carcontrollerserver.permissions import IsAuthenticatedPost, IsNotAuthenticatedPost
 from rest_framework.response import Response
 from carcontrollerserver.models import Game, Score
@@ -12,6 +11,19 @@ class GameViewSet(generics.ListAPIView):
     serializer_class = GameSerializer
 
 class ScoreViewSet(APIView):
+    '''
+    Viewset handling the requests to the /api/scores endpoint.
+    
+    GET: does not require authentication and returns all the scores.\n
+    POST: requires Basic Authentication. It creates a new score for the authenticated account. The request body JSON needs to 
+    have the following format:
+        
+        {
+            "score": score value(int),
+            "game": game id(int)
+        }
+
+    '''
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticatedPost]
 
@@ -27,6 +39,16 @@ class ScoreViewSet(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class UserViewSet(APIView):
+    '''
+    ViewSet responsible for all the methods of the /api/users endpoint.
+
+    GET: requires Basic Authentication. It returns the username and the email of the authenticated user.\n
+    POST: unique HTTP verb that does not require authentication since it is used to create a new account. The credentials of the
+    account(email, username and password) are passed in the request body JSON.\n
+    PUT: requires Basic Authentication. It modifies the authenticated user account with the specified credentials(email, username
+    and password).\n
+    DELETE: requires Basic Authentication to then delete the authenticated account.
+    '''
     authentication_class = [BasicAuthentication]
     permission_classes = [IsNotAuthenticatedPost]
 

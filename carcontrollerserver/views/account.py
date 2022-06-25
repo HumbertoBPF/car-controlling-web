@@ -54,9 +54,11 @@ def logout(request):
 def profile(request):
     if request.method == "GET" and request.user.is_authenticated:
         if contains_parameters(request.GET, "game") and request.GET.get('game') != "all_games":
+            # If some game was specified in the GET parameters, show the scores of this game
             game = get_object_or_404(Game, game_tag = request.GET.get('game'))
             scores = Score.objects.filter(game=game, user=request.user)
         else:
+            # If no game was specified in the GET parameters, return all the games
             game = None
             scores = Score.objects.filter(user=request.user)
         # List of all the games for the select field of the form
