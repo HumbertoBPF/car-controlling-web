@@ -22,7 +22,7 @@ screenshots are provided to show these functionalities in a browser:
 
 - Homepage:
 
-![image](https://user-images.githubusercontent.com/31226297/175855238-6a0df1ca-db58-4127-a3d1-6884ca018ec2.png)
+![image](https://user-images.githubusercontent.com/31226297/176579109-c45a6d13-09bb-44e0-9f7e-03f207733d90.png)
 
 - Rankings page:
 
@@ -30,4 +30,16 @@ screenshots are provided to show these functionalities in a browser:
 
 - Profile page:
 
-![image](https://user-images.githubusercontent.com/31226297/175855422-78801be1-d5e8-4e7f-ab63-7fd48eb92a5d.png)
+![image](https://user-images.githubusercontent.com/31226297/176578996-80bfc98a-608e-4619-80f0-cd024f24e2f7.png)
+
+:arrow_down: Installation instructions
+
+This section describes how to install and run this project on any machine. All that is going to be presented was tested on Windows, but it is probably similar for other OS. 
+
+First of all, you must have Python installed on your OS(the version used to build the project was Python 3.10). Then, it is necessary to install the following Python libraries and frameworks, which can be done by using the requirements.txt file on the root of the root folder:
+ 
+- install django(pip install django). Version used to build the project was Django 4.0.5
+- install pillow(pip install pillow). Version used to build the project was 9.1.1
+- install djangorestframework(pip install djangorestframework). Version used to build the project was 3.13.1
+
+Finally, you can run "python manage.py runserver" from the root folder on the command line. This should launch the server on the local port 8000. Type "localhost:8000/dashboard" on your browser. It should exhibit the home page of the website.
