@@ -1,4 +1,4 @@
-from carcontrollerserver.models import AppUser, Game, Score
+from carcontrollerserver.models import Ads, AppUser, Game, Score
 from carcontrollerserver.validators import is_valid_user_data
 from rest_framework import serializers
 from django.contrib.auth.models import User
@@ -54,3 +54,9 @@ class UserSerializer(serializers.Serializer):
         instance.password = make_password(validated_data.get("password", instance.password))
         instance.save()
         return instance
+
+class AdsSerializer(serializers.ModelSerializer):
+    picture = serializers.ReadOnlyField(source='picture.url')
+    class Meta:
+        model=Ads
+        fields='__all__'

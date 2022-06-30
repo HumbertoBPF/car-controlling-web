@@ -1,11 +1,13 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from application.utils import contains_parameters
 from django.db.models import Min
-from carcontrollerserver.models import Game, Score
+from carcontrollerserver.models import Ads, Game, Score
 
 # Create your views here.
 def dashboard(request):
-    return render(request, 'index.html')
+    ads = Ads.objects.filter()
+    print("ads: "+str(ads))
+    return render(request, 'index.html', {'ads': ads})
 
 def rankings(request):
     if request.method == "GET":

@@ -1,4 +1,4 @@
-from .views.viewsets import GameViewSet, ScoreViewSet, UserViewSet
+from .views.viewsets import AdsViewSet, GameViewSet, ScoreViewSet, UserViewSet
 from .views import general, account
 from django.urls import path
 
@@ -17,5 +17,6 @@ urlpatterns = [
     path('account/change-picture', account.change_picture, name='change-picture'),
     path('api/scores', ScoreViewSet.as_view()),
     path('api/games', GameViewSet.as_view()),
-    path('api/users', UserViewSet.as_view())
+    path('api/users', UserViewSet.as_view()),
+    path('api/ads', AdsViewSet.as_view())
 ]

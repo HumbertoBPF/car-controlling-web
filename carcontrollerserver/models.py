@@ -1,5 +1,4 @@
 from datetime import datetime
-from tkinter.tix import Tree
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -20,3 +19,8 @@ class Score(models.Model):
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
+
+class Ads(models.Model):
+    title = models.CharField(max_length=50, blank=True)
+    description = models.CharField(max_length=255, blank=True)
+    picture = models.ImageField(upload_to='ads/', blank=True)

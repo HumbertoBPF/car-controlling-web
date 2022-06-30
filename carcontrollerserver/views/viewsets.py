@@ -1,7 +1,7 @@
 from carcontrollerserver.permissions import IsAuthenticatedPost, IsNotAuthenticatedPost
 from rest_framework.response import Response
-from carcontrollerserver.models import Game, Score
-from carcontrollerserver.serializers import GameSerializer, ScoreSerializer, UserSerializer
+from carcontrollerserver.models import Ads, Game, Score
+from carcontrollerserver.serializers import AdsSerializer, GameSerializer, ScoreSerializer, UserSerializer
 from rest_framework.views import APIView
 from rest_framework import generics, status
 from rest_framework.authentication import BasicAuthentication
@@ -75,3 +75,7 @@ class UserViewSet(APIView):
         user = request.user
         user.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
+
+class AdsViewSet(generics.ListAPIView):
+    queryset = Ads.objects.all()
+    serializer_class = AdsSerializer
