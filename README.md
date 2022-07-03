@@ -36,7 +36,7 @@ screenshots are provided to show these functionalities in a browser:
 
 This section describes how to install and run this project on any machine. All that is going to be presented was tested on Windows, but it is probably similar for other OS. 
 
-First of all, you must have Python installed on your OS (the version used to build the project was Python 3.10). Then, it is necessary to install the following Python libraries and frameworks, which can be done by using the requirements.txt file on the root of the root folder:
+First of all, you must have Python installed on your OS (the version used to build the project was Python 3.10). Then, it is necessary to install the following Python libraries and frameworks, which can be done by using the requirements.txt file on the root folder:
  
 - Install django (pip install django). Version used to build the project was Django 4.0.5
 - Install pillow (pip install pillow). Version used to build the project was 9.1.1
