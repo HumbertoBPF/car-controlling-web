@@ -21,3 +21,6 @@ def rankings(request):
         games = Game.objects.all()
         return render(request, 'rankings.html', {'scores': scores, 'games': games, 'selected_game': game})
     return redirect('dashboard')
+
+def game_download(request):
+    return render(request, 'game_download.html')

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="container-fluid">
+    <h5 class="mb-3">Download the "car controlling via keyboard" game:</h5>
+
+    <p>Execute the following steps in order to acquire and launch the game:</p>
+
+    <ol>
+        <li class="mt-3">Click on <a href="{% static 'CarController.zip' %}">this link</a> to download the game files.</li>
+        <li class="mt-3">Extract the .zip folder to a convenient place for you.
+            <br>
+            <img src="{% static 'extract_game_folder.png' %}" class="img-fluid mt-3" alt="...">
+        </li>
+        <li class="mt-3">Click on the file named "CarController" to launch the game.
+            <br>
+            <img src="{% static 'launch_game.png' %}" class="img-fluid mt-3" alt="...">
+        </li>
+    </ol>
+</section>
+
+{% endblock %}
