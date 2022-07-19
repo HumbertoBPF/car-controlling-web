@@ -25,7 +25,18 @@
 
                     <form class="mt-3" action="{% url 'change-picture' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{form_picture.as_p}}
+                        {% for field in form_picture.visible_fields %}
+                            <div class="form-group mb-3">
+                                <label for="{{field.id_for_label}}">{{field.label}}</label>
+                                {{field}}
+                            </div>
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{field.errors}}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        <!--{{form_picture.as_p}}-->
                         <button type="submit" class="btn btn-primary">Change picture</button>
                     </form>
                 </div>

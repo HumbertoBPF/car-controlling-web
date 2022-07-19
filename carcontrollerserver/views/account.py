@@ -24,12 +24,12 @@ def login(request):
                 if user is not None:
                     auth.login(request, user)
                     return redirect('dashboard')
-    messages.error(request, "Wrong credentials")
+        messages.error(request, "Wrong credentials")
     return redirect('login-form')
 
 def signup(request):
     if request.method == "POST":
-        if contains_parameters(request.POST, "username", "password"):
+        if contains_parameters(request.POST, "email", "username", "password", "password_confirmation"):
             email = request.POST.get('email')
             username = request.POST.get('username')
             password = request.POST.get('password')
@@ -77,7 +77,8 @@ def profile(request):
 def delete_account(request):
     if request.method == "POST" and request.user.is_authenticated:
         request.user.delete()
-    return redirect('dashboard')
+        return redirect('dashboard')
+    return redirect('login-form')
 
 def update_account_form(request):
     if request.user.is_authenticated:
@@ -86,7 +87,7 @@ def update_account_form(request):
 
 def update_account(request):
     if request.method == "POST" and request.user.is_authenticated:
-        if contains_parameters(request.POST, "username", "password"):
+        if contains_parameters(request.POST, "email", "username", "password", "password_confirmation"):
             email = request.POST.get('email')
             username = request.POST.get('username')
             password = request.POST.get('password')
@@ -105,7 +106,7 @@ def update_account(request):
             else:
                 messages.error(request, error_msg)
             return redirect('update-account-form')
-    return redirect('profile')
+    return redirect('login-form')
 
 def change_picture(request):
     if request.method == "POST" and request.user.is_authenticated:
@@ -114,4 +115,17 @@ def change_picture(request):
             app_user = get_object_or_404(AppUser, user = request.user)
             app_user.picture = form_picture.cleaned_data.get('picture')
             app_user.save()
-    return redirect('profile')
+            return redirect('profile')
+        # Invalid form, return form with error message
+        else:
+            scores = Score.objects.filter(user=request.user)
+            games = Game.objects.all()
+            app_user = get_object_or_404(AppUser, user=request.user)
+            return render(request, 'profile.html', {
+                                                'scores': scores, 
+                                                'games': games, 
+                                                'selected_game': None, 
+                                                'app_user': app_user,
+                                                'form_picture': form_picture
+                                            })
+    return redirect('login-form')
