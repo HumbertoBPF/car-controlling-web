@@ -56,7 +56,14 @@ class UserSerializer(serializers.Serializer):
         return instance
 
 class AdsSerializer(serializers.ModelSerializer):
-    picture = serializers.ReadOnlyField(source='picture.url')
+    picture = serializers.SerializerMethodField()
     class Meta:
         model=Ads
         fields='__all__'
+
+    def get_picture(self, obj):
+        # Verifies if the ad has a picture associated with it, before trying to extract the url
+        if obj.picture:
+            return obj.picture.url
+        return ''
+        

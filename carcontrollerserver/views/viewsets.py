@@ -66,7 +66,7 @@ class UserViewSet(APIView):
             }, status=status.HTTP_201_CREATED)
 
     def put(self, request):
-        serializer = UserSerializer(instance=request.user, data=request.data, partial=True, context={"user": request.user})
+        serializer = UserSerializer(instance=request.user, data=request.data, context={"user": request.user})
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         return Response({"username": serializer.data.get('username'),"email": serializer.data.get('email')})

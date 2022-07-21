@@ -1,5 +1,4 @@
 import random
-import uuid
 import pytest
 
 from urllib.parse import urlencode
@@ -7,6 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 from django.contrib.auth.models import User
 from carcontrollerserver.models import AppUser, Game
+from carcontrollerserver.tests.conftest import get_random_string
 from carcontrollerserver.validators import is_valid_user_data
 
 
@@ -36,29 +36,29 @@ def test_dashboard_with_ads(client, ads):
     'email', [
         '',
         'test@test.com',
-        'test @test.com'
+        get_random_string(random.randint(1, 8))+' '+get_random_string(random.randint(1, 8))+'@test.com'
     ]
 )
 @pytest.mark.parametrize(
     'username', [
         'test',
         '', 
-        't est'
+        get_random_string(random.randint(1,6))+' '+get_random_string(random.randint(1,6))
     ]
 )
 @pytest.mark.parametrize(
     'password', [
         'password',
         '',
-        'passwor d',
-        'p',
-        'passwordpasswordpasswordpasswordpasswordpasswordpasswordpassword'
+        get_random_string(8)+' '+get_random_string(1),
+        get_random_string(random.randint(1,5)),
+        get_random_string(random.randint(31,40))
     ]
 )
 @pytest.mark.parametrize(
     'password_confirmation', [
         'password',
-        'passwordd'
+        get_random_string(random.randint(6, 30))
     ]
 )
 def test_user_data_validator(email, username, password, password_confirmation):
@@ -71,8 +71,7 @@ def test_user_data_validator(email, username, password, password_confirmation):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'email, username', [
-        ('test@test.com', 'test'),
-        ('humberto.bpereiraf@test.com', 'humberto.borges')
+        (get_random_string(random.randint(10, 16)), get_random_string(random.randint(6, 12)))
     ]
 )
 def test_user_data_validator_unique_fields(create_users, email, username):
@@ -100,9 +99,9 @@ def test_user_data_validator_unique_fields(create_users, email, username):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'username, password', [
-        ('HumbertoBPF', "123456"),
-        (None, "123456"),
-        ('HumbertoBPF', None)
+        (get_random_string(random.randint(6, 12)), get_random_string(random.randint(6, 12))),
+        (None, get_random_string(random.randint(6, 12))),
+        (get_random_string(random.randint(6, 12)), None)
     ]
 )
 def test_login_wrong_username_and_password(client, create_users, username, password):
@@ -128,7 +127,7 @@ def test_login_wrong_username_and_password(client, create_users, username, passw
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'username', [
-        'HumbertoBPF',
+        get_random_string(random.randint(6, 12)),
         None
     ]
 )
@@ -152,12 +151,11 @@ def test_login_wrong_username(client, create_users, username):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'password', [
-        "123456",
+        get_random_string(random.randint(6, 12)),
         None
     ]
 )
-@pytest.mark.parametrize('number_executions', range(random.randint(5,10)))
-def test_login_wrong_password(client, create_users, password, number_executions):
+def test_login_wrong_password(client, create_users, password):
     print()
     user = create_users()[0]
 
@@ -175,8 +173,7 @@ def test_login_wrong_password(client, create_users, password, number_executions)
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('number_executions', range(random.randint(5,10)))
-def test_login_successful(client, create_users, number_executions):
+def test_login_successful(client, create_users):
     print()
     user = create_users()[0]
     
@@ -193,13 +190,13 @@ def test_login_successful(client, create_users, number_executions):
 @pytest.mark.parametrize(
     'email', [
         None, 
-        'test@test.com'
+        get_random_string(random.randint(10, 16))+"@test.com"
     ]
 )
 @pytest.mark.parametrize(
     'username', [
         None, 
-        'test'
+        get_random_string(random.randint(6, 12))
     ]
 )
 @pytest.mark.parametrize(
@@ -315,15 +312,14 @@ def test_game_filter_ok_reponse(client, scores, game):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('number_executions', range(random.randint(5,10)))
-def test_game_filter_not_found_response(client, scores, number_executions):
+def test_game_filter_not_found_response(client, scores):
     print()
     user = User.objects.first()
     client.login(
        username=user.username, password='strong-password'
     )
     base_url = reverse('profile')
-    query = urlencode({'game': uuid.uuid4()})
+    query = urlencode({'game': get_random_string(12)})
     url = '{}?{}'.format(base_url, query)
     
     response = client.get(url)
@@ -394,11 +390,10 @@ def test_rankings_ok_response(client, scores, game):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('number_executions', range(random.randint(5,10)))
-def test_rankings_not_found_response(client, scores, number_executions):
+def test_rankings_not_found_response(client, scores):
     print()
     base_url = reverse('rankings')
-    query = urlencode({'game': uuid.uuid4()})
+    query = urlencode({'game': get_random_string(12)})
     url = '{}?{}'.format(base_url, query)
     
     response = client.get(url)

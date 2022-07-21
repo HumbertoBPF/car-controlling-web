@@ -1,8 +1,20 @@
 import random
-import uuid
 import pytest
+import string
+
 from carcontrollerserver.models import Ads, AppUser, Game, Score
 from django.contrib.auth.models import User
+from rest_framework.test import APIClient
+
+
+def get_random_string(size):
+    allowed_chars = string.ascii_letters + string.digits
+    return ''.join(random.choice(allowed_chars) for x in range(size))
+
+
+@pytest.fixture
+def api_client():
+    return APIClient()
 
 
 @pytest.fixture
@@ -61,7 +73,7 @@ def create_users():
                 if i > 0:
                     username += (" " + i)
             else:
-                username = str(uuid.uuid4())
+                username = get_random_string(random.randint(6, 12))
             # Email is a random uuid4 identifier if it is not specified
             if kwargs.get('email') is not None:
                 email = kwargs.get('email')
@@ -69,7 +81,7 @@ def create_users():
                 if i > 0:
                     email += (" " + i)
             else:
-                email = str(uuid.uuid4())
+                email = get_random_string(random.randint(10, 16))+"@test.com"
             # Password is 'strong-password' if it is not specified
             if kwargs.get('password') is not None:
                 password = kwargs.get('password')
