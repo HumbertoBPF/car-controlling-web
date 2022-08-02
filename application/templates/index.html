@@ -4,15 +4,15 @@
 
 <section class="container-fluid">
     {% if user.is_authenticated %}
-        <h5 class="mb-3">Welcome back, {{ user.username }}</h5>
+        <h5 id="greeting" class="mb-3">Welcome back, {{ user.username }}</h5>
     {% endif %}
-    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselAds" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
             {% for ad in ads %}
                 {% if forloop.counter ==  1 %}
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{forloop.counter0}}" class="active" aria-current="true" aria-label="{{forloop.counter}}"></button>
+                    <button type="button" data-bs-target="#carouselAds" data-bs-slide-to="{{forloop.counter0}}" class="active" aria-current="true" aria-label="{{forloop.counter}}"></button>
                 {% else %}
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{forloop.counter0}}" aria-label="{{forloop.counter}}"></button>
+                    <button type="button" data-bs-target="#carouselAds" data-bs-slide-to="{{forloop.counter0}}" aria-label="{{forloop.counter}}"></button>
                 {% endif %}
             {% endfor %}
         </div>
@@ -23,9 +23,7 @@
                 {% else %}
                 <div class="carousel-item">
                 {% endif %}
-                {% if ad.picture %}
                     <img src="{{ad.picture.url}}" class="d-block w-100" alt="...">
-                {% endif %}
                     <div class="carousel-caption d-none d-md-block">
                         <h5>{{ ad.title }}</h5>
                         <p>{{ ad.description }}</p>
@@ -33,11 +31,11 @@
                 </div>
             {% endfor %}    
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselAds" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselAds" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>

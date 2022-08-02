@@ -2,6 +2,8 @@ import random
 import pytest
 import string
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from carcontrollerserver.models import Ads, AppUser, Game, Score
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
@@ -12,6 +14,18 @@ def get_random_string(size):
     return ''.join(random.choice(allowed_chars) for x in range(size))
 
 
+@pytest.fixture(scope="class", params=["Firefox", "Edge", "Chrome"])
+def driver(request):
+    if request.param == "Firefox":
+        driver = webdriver.Firefox(service=Service("C:/Users/Humberto/Downloads/geckodriver.exe"))
+    elif request.param == "Edge":
+        driver = webdriver.Edge(service=Service("C:/Users/Humberto/Downloads/msedgedriver.exe"))
+    else:
+        driver = webdriver.Chrome(service=Service("C:/Users/Humberto/Downloads/chromedriver.exe"))
+    yield driver
+    driver.close()
+
+
 @pytest.fixture
 def api_client():
     return APIClient()
@@ -19,9 +33,13 @@ def api_client():
 
 @pytest.fixture
 def ads():
-    ad1 = Ads(title="ad 1", description="This is the first ad", picture=None)
-    ad2 = Ads(title="ad 2", description="This is the second ad", picture=None)
-    ad3 = Ads(title="ad 3", description="This is the third ad", picture=None)
+    ad1 = Ads(title="ad 1", description="This is the first ad")
+    ad2 = Ads(title="ad 2", description="This is the second ad")
+    ad3 = Ads(title="ad 3", description="This is the third ad")
+    with open('C:/Users/Humberto/Desktop/Humberto/Study/WebDev/car-controller-app/application/static/logo.png', 'rb') as fp:    
+        ad1.picture.save('myphoto.jpg', fp, save=False)
+        ad2.picture.save('myphoto.jpg', fp, save=False)
+        ad3.picture.save('myphoto.jpg', fp, save=False)
     ad1.save()
     ad2.save()
     ad3.save()
@@ -42,9 +60,7 @@ def games():
 @pytest.fixture
 def scores(create_users, games):
     k = random.randint(3, 5)
-    create_users(k=k)
-    users = User.objects.all()
-    games = Game.objects.all()
+    users = create_users(k=k)
     # Create from 3 to 5 scores for each user and for each game
     for user in users:
         for game in games:

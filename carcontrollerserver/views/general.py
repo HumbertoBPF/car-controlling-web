@@ -6,7 +6,6 @@ from carcontrollerserver.models import Ads, Game, Score
 # Create your views here.
 def dashboard(request):
     ads = Ads.objects.filter()
-    print("ads: "+str(ads))
     return render(request, 'index.html', {'ads': ads})
 
 def rankings(request):

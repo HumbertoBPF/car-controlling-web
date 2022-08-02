@@ -9,7 +9,7 @@
         <select class="form-select mb-3" name="game">
             {% for game in games %}
                 {% if game == selected_game %}
-                    <option value="{{game.game_tag}}" selected>{{game.game_name}}</option>
+                    <option id="gameFilterField" value="{{game.game_tag}}" selected>{{game.game_name}}</option>
                 {% else %}
                     <option value="{{game.game_tag}}">{{game.game_name}}</option>
                 {% endif%}
@@ -29,9 +29,9 @@
         <tbody>
             {% for score in scores %}
                 <tr>
-                    <th scope="row">{{forloop.counter}}</th>
-                    <td>{{score.user__username}}</td>
-                    <td>{{score.score}}</td>
+                    <th id="scorePosition" scope="row">{{forloop.counter}}</th>
+                    <td id="scoreUser">{{score.user__username}}</td>
+                    <td id="scoreValue">{{score.score}}</td>
                 </tr>
             {% endfor %}
         </tbody>

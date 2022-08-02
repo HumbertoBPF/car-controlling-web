@@ -16,11 +16,11 @@
     <header class="mb-3">
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'dashboard' %}">
-                    <img src="{% static 'logo.png' %}" alt="" width="30" height="24">
-                    Car Control by Keyboard
-                </a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+              <a class="navbar-brand" href="{% url 'dashboard' %}">
+                  <img src="{% static 'logo.png' %}" alt="" width="30" height="24">
+                  Car Control by Keyboard
+              </a>
+              <button id="buttonShowMenu" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
@@ -31,22 +31,22 @@
                 <div class="offcanvas-body">
                   <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Home</a>
+                        <a id="homeItem" class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'rankings' %}">Rankings</a>
+                        <a id="rankingsItem" class="nav-link" href="{% url 'rankings' %}">Rankings</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a id="buttonDropdownAccountItem" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Account
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             {% if user.is_authenticated %}
-                              <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                              <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                              <li><a id="profileItem" class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                              <li><a id="logoutItem" class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             {% else %}
-                              <li><a class="dropdown-item" href="{% url 'signup-form' %}">Signup</a></li>
-                              <li><a class="dropdown-item" href="{% url 'login-form' %}">Login</a></li>
+                              <li><a id="signupItem" class="dropdown-item" href="{% url 'signup-form' %}">Signup</a></li>
+                              <li><a id="loginItem" class="dropdown-item" href="{% url 'login-form' %}">Login</a></li>
                             {% endif %}
                         </ul>
                     </li>

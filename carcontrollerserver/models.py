@@ -23,4 +23,4 @@ class AppUser(models.Model):
 class Ads(models.Model):
     title = models.CharField(max_length=50, blank=True)
     description = models.CharField(max_length=255, blank=True)
-    picture = models.ImageField(upload_to='ads/', blank=True)
+    picture = models.ImageField(upload_to='ads/')

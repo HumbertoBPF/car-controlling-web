@@ -9,8 +9,8 @@
         <div class="row g-0">
             <div class="col-12 col-md-7 col-lg-9 mt-3">
                 <div class="card-body">
-                    <p>Username: {{user.username}}</p>
-                    <p>Email: {{user.email}}</p>
+                    <p id="usernameInfo">Username: {{user.username}}</p>
+                    <p id="emailInfo">Email: {{user.email}}</p>
 
                     <a class="btn btn-info" href="{% url 'update-account-form' %}" role="button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -36,8 +36,7 @@
                                 </div>
                             {% endfor %}
                         {% endfor %}
-                        <!--{{form_picture.as_p}}-->
-                        <button type="submit" class="btn btn-primary">Change picture</button>
+                        <button id="buttonChangeProfilePicture" type="submit" class="btn btn-primary">Change picture</button>
                     </form>
                 </div>
             </div>
@@ -63,10 +62,10 @@
             Are you sure that you want to delete your account? This action is irreversible.
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancel deletion</button>
+            <button id="declineButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancel deletion</button>
             <form action="{% url 'delete-account' %}" method="POST">
                 {% csrf_token %}
-                <button class="btn btn-danger" type="submit">Yes, I want to delete my account</button>
+                <button id="confirmButton" class="btn btn-danger" type="submit">Yes, I want to delete my account</button>
             </form>
             </div>
         </div>
@@ -77,14 +76,14 @@
 
     <form action="{% url 'profile' %}" method="GET">
         <select class="form-select mb-3" name="game">
-            {% if game %}
-                <option value="all_games" selected>All games</option>
-            {% else %}        
+            {% if selected_game %}
                 <option value="all_games">All games</option>
+            {% else %}        
+                <option id="gameFilterField" value="all_games" selected>All games</option>
             {% endif %}
             {% for game in games %}
                 {% if game == selected_game %}
-                    <option value="{{game.game_tag}}" selected>{{game.game_name}}</option>
+                    <option id="gameFilterField" value="{{game.game_tag}}" selected>{{game.game_name}}</option>
                 {% else %}
                     <option value="{{game.game_tag}}">{{game.game_name}}</option>
                 {% endif%}
@@ -104,9 +103,9 @@
         <tbody>
             {% for score in scores %}
                 <tr>
-                    <td>{{score.game}}</td>
-                    <td>{{score.date}}</td>
-                    <td>{{score.score}}</td>
+                    <td id="scoreGameName">{{score.game}}</td>
+                    <td id="scoreDate">{{score.date|date:"Y/m/d h:i:s A"}}</td>
+                    <td id="scoreValue">{{score.score}}</td>
                 </tr>
             {% endfor %}
         </tbody>
