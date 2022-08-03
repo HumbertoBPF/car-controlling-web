@@ -1,7 +1,7 @@
 import time
-from urllib.parse import urlencode
 import pytest
 
+from urllib.parse import urlencode
 from selenium.webdriver.common.by import By
 from random import randint
 from django.contrib.auth.models import User
@@ -463,7 +463,6 @@ class TestsSelenium:
             'driving_game',
             'obstacle_game',
             'parking_game',
-            'all_games',
             None
         ]
     )
@@ -488,18 +487,18 @@ class TestsSelenium:
         assert username_info.text == "Username: " + user.username
         assert email_info.text == "Email: " + user.email
         
-        if game_filter is not None and game_filter != "all_games":
+        if game_filter is not None:
             game = Game.objects.filter(game_tag=game_filter).first()
             scores = Score.objects.filter(user=user, game__game_tag=game_filter)
-            for i in range(len(score_game_names)):
-                # Checking if the correct game name is shown
-                assert score_game_names[i].text == game.game_name
-            # Checks if the correct option is selected in the game filter field
-            assert selected_option.text == Game.objects.get(game_tag=game_filter).game_name
         else:
-            # Checks if the correct option is selected in the game filter field
-            assert selected_option.text == "All games"
-            scores = Score.objects.filter(user=user)
+            game = Game.objects.first()
+            scores = Score.objects.filter(user=user, game=game)
+
+        for i in range(len(score_game_names)):
+            # Checking if the correct game name is shown
+            assert score_game_names[i].text == game.game_name
+        # Checks if the correct option is selected in the game filter field
+        assert selected_option.text == game.game_name
 
         for i in range(len(score_game_names)):
             # Checking details of each score

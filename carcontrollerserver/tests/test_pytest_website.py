@@ -10,7 +10,6 @@ from carcontrollerserver.tests.conftest import get_random_string
 from carcontrollerserver.validators import is_valid_user_data
 
 
-# Create your tests here.
 @pytest.mark.django_db
 def test_dashboard_no_ads(client):
     """Tests that no error happens when there is no ads to be shown in the dashboard"""
@@ -226,8 +225,7 @@ def test_authenticated_endpoints_unauthenticated(client, url):
     'game', [
         'driving_game',
         'obstacle_game',
-        'parking_game',
-        'all_games'
+        'parking_game'
     ]
 )
 def test_game_filter_ok_reponse(client, scores, game):

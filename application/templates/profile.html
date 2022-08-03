@@ -76,11 +76,6 @@
 
     <form action="{% url 'profile' %}" method="GET">
         <select class="form-select mb-3" name="game">
-            {% if selected_game %}
-                <option value="all_games">All games</option>
-            {% else %}        
-                <option id="gameFilterField" value="all_games" selected>All games</option>
-            {% endif %}
             {% for game in games %}
                 {% if game == selected_game %}
                     <option id="gameFilterField" value="{{game.game_tag}}" selected>{{game.game_name}}</option>
