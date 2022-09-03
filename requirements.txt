@@ -1,3 +1,5 @@
 Django==4.0.5
 djangorestframework==3.13.1
-Pillow==9.1.1
+Pillow==9.2.0
+pytest==7.1.2
+selenium==4.3.0

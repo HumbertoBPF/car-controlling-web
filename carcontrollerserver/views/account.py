@@ -8,11 +8,14 @@ from carcontrollerserver.models import AppUser, Game, Score
 from django.contrib.auth.hashers import make_password
 from carcontrollerserver.validators import is_valid_user_data
 
+
 def signup_form(request):
     return render(request, 'signup_form.html')
 
+
 def login_form(request):
     return render(request, 'login_form.html')
+
 
 def login(request):
     if request.method == "POST":
@@ -26,6 +29,7 @@ def login(request):
                     return redirect('dashboard')
         messages.error(request, "Wrong credentials")
     return redirect('login-form')
+
 
 def signup(request):
     if request.method == "POST":
@@ -46,10 +50,12 @@ def signup(request):
             return redirect('signup-form')
     return redirect('dashboard')
 
+
 def logout(request):
     if request.user.is_authenticated:
         auth.logout(request)
     return redirect('dashboard')
+
 
 def profile(request):
     if request.method == "GET" and request.user.is_authenticated:
@@ -73,16 +79,19 @@ def profile(request):
                                             })
     return redirect('login-form')
 
+
 def delete_account(request):
     if request.method == "POST" and request.user.is_authenticated:
         request.user.delete()
         return redirect('dashboard')
     return redirect('login-form')
 
+
 def update_account_form(request):
     if request.user.is_authenticated:
         return render(request, 'update_account_form.html')
     return redirect('login-form')
+
 
 def update_account(request):
     if request.method == "POST" and request.user.is_authenticated:
@@ -106,6 +115,7 @@ def update_account(request):
                 messages.error(request, error_msg)
             return redirect('update-account-form')
     return redirect('login-form')
+
 
 def change_picture(request):
     if request.method == "POST" and request.user.is_authenticated:

@@ -3,10 +3,12 @@ from application.utils import contains_parameters
 from django.db.models import Min
 from carcontrollerserver.models import Ads, Game, Score
 
+
 # Create your views here.
 def dashboard(request):
     ads = Ads.objects.filter()
     return render(request, 'index.html', {'ads': ads})
+
 
 def rankings(request):
     if request.method == "GET":
@@ -20,6 +22,7 @@ def rankings(request):
         games = Game.objects.all()
         return render(request, 'rankings.html', {'scores': scores, 'games': games, 'selected_game': game})
     return redirect('dashboard')
+
 
 def game_download(request):
     return render(request, 'game_download.html')

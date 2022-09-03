@@ -4,16 +4,19 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
+
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Game
-        fields='__all__'
+        model = Game
+        fields = '__all__'
+
 
 class ScoreSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
+
     class Meta:
-        model=Score
-        fields='__all__'
+        model = Score
+        fields = '__all__'
 
     def create(self, validated_data):
         game = validated_data.get("game")
@@ -21,6 +24,7 @@ class ScoreSerializer(serializers.ModelSerializer):
         score = Score(user=self.context.get("user"), game=game, score=score)
         score.save()
         return score
+
 
 class UserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
@@ -55,11 +59,13 @@ class UserSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+
 class AdsSerializer(serializers.ModelSerializer):
     picture = serializers.SerializerMethodField()
+
     class Meta:
-        model=Ads
-        fields='__all__'
+        model = Ads
+        fields = '__all__'
 
     def get_picture(self, obj):
         # Verifies if the ad has a picture associated with it, before trying to extract the url

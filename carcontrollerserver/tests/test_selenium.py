@@ -10,7 +10,6 @@ from carcontrollerserver.tests.conftest import get_random_string
 
 
 class TestsSelenium:
-
     pausing_time = None
 
     def pause(self):
@@ -21,12 +20,12 @@ class TestsSelenium:
         input_username = driver.find_element(By.ID, 'floatingInputUsername')
         input_password = driver.find_element(By.ID, 'floatingPassword')
         submit_button = driver.find_element(By.CLASS_NAME, 'btn-success')
-        
+
         input_username.send_keys(username)
         input_password.send_keys(password)
-        self.pause()    # Pause to see the form being filled
+        self.pause()  # Pause to see the form being filled
         submit_button.click()
-        self.pause()    # Pause to see the result of the form submission
+        self.pause()  # Pause to see the result of the form submission
 
     def fill_account_form(self, driver, email, username, password, password_confirmation):
         input_email = driver.find_element(By.ID, 'floatingInputEmail')
@@ -34,45 +33,41 @@ class TestsSelenium:
         input_password = driver.find_element(By.ID, 'floatingPassword')
         input_confirmation_password = driver.find_element(By.ID, 'floatingPasswordConfirmation')
         submit_button = driver.find_element(By.CLASS_NAME, 'btn-success')
-        
+
         input_email.send_keys(email)
         input_username.send_keys(username)
         input_password.send_keys(password)
         input_confirmation_password.send_keys(password_confirmation)
-        self.pause()    # Pause to see the form being filled
+        self.pause()  # Pause to see the form being filled
         submit_button.click()
-        self.pause()    # Pause to see the result of the form submission
+        self.pause()  # Pause to see the result of the form submission
 
     def is_account_form_valid_in_HTML(self, driver):
         """
-        Checks the validation of the form performed by the HTML itself
+        Checks the validation of the form performed by the HTML itself.
         
-        Parameters:
-        -   driver: Selenium driver object.
+        :param driver: Selenium driver object.
 
-        Return:
-        -   A boolean indicating if the data were validated by the HTML.
+        :return: a boolean indicating if the data were validated by the HTML.
         """
         input_email = driver.find_element(By.ID, 'floatingInputEmail')
         input_username = driver.find_element(By.ID, 'floatingInputUsername')
         input_password = driver.find_element(By.ID, 'floatingPassword')
         input_confirmation_password = driver.find_element(By.ID, 'floatingPasswordConfirmation')
-        
-        return driver.execute_script("return arguments[0].checkValidity();", input_email) and\
-                driver.execute_script("return arguments[0].checkValidity();", input_username) and\
-                driver.execute_script("return arguments[0].checkValidity();", input_password) and\
-                driver.execute_script("return arguments[0].checkValidity();", input_confirmation_password)
+
+        return driver.execute_script("return arguments[0].checkValidity();", input_email) and \
+               driver.execute_script("return arguments[0].checkValidity();", input_username) and \
+               driver.execute_script("return arguments[0].checkValidity();", input_password) and \
+               driver.execute_script("return arguments[0].checkValidity();", input_confirmation_password)
 
     def assert_menu(self, driver, is_authenticated):
         """
         Asserts if the menu has the expected items according to whether the user is authenticated. If the assertion
         fails, an exception is raised.
 
-        Parameters:
-
-        -   driver: Selenium driver object
-        -   is_authenticated: boolean indicating if the user is authenticated
-
+        :param driver: Selenium driver object
+        :param is_authenticated: boolean indicating if the user is authenticated
+        :type is_authenticated: bool
         """
         driver.find_element(By.ID, 'homeItem')
         driver.find_element(By.ID, 'rankingsItem')
@@ -88,12 +83,11 @@ class TestsSelenium:
         """
         Fills the login form with valid data and authenticates. After a login, the browser user is redirected to 
         the dashboard webpage.
-        
-        Parameters
 
-        -   driver: Selenium driver object
-        -   live_server: Pytest live_server fixture
-        -   user: Django model instance representing a user  
+        :param driver: Selenium driver object
+        :param live_server: Pytest live_server fixture
+        :param user: Django model instance representing a user
+        :type user: User
         """
         driver.get(live_server.url + "/account/login-form")
         self.pause()
@@ -101,7 +95,7 @@ class TestsSelenium:
 
     @pytest.mark.django_db
     def test_selenium_dashboard(self, driver, live_server, ads):
-        "Tests dashboard access"
+        """Tests dashboard access"""
         driver.get(live_server.url + "/dashboard")
         carousel_ads = driver.find_elements(By.ID, 'carouselAds')
         carousel_items = driver.find_elements(By.CLASS_NAME, 'carousel-item')
@@ -112,9 +106,9 @@ class TestsSelenium:
 
     @pytest.mark.django_db
     def test_selenium_successful_login(self, driver, live_server, create_users):
-        "Tests successful login"
+        """Tests successful login"""
         users = create_users(k=randint(1, 10))
-        user = users[randint(0, len(users)-1)]
+        user = users[randint(0, len(users) - 1)]
         driver.get(live_server.url + "/account/login-form")
         self.pause()
         # Fills the login form with valid data and authenticates
@@ -132,10 +126,10 @@ class TestsSelenium:
 
     @pytest.mark.django_db
     @pytest.mark.parametrize(
-    'username, password', [
-        (get_random_string(randint(6, 12)), get_random_string(randint(6, 30))),
-        ('', get_random_string(randint(6, 30))),
-        (get_random_string(randint(6, 12)), '')
+        'username, password', [
+            (get_random_string(randint(6, 12)), get_random_string(randint(6, 30))),
+            ('', get_random_string(randint(6, 30))),
+            (get_random_string(randint(6, 12)), '')
         ]
     )
     def test_selenium_fail_login(self, driver, live_server, create_users, username, password):
@@ -158,17 +152,17 @@ class TestsSelenium:
         # Fills the signup form with valid data
         driver.get(live_server.url + "/account/signup-form")
         self.pause()
-        email = get_random_string(randint(6, 18))+"@test.com"
+        email = get_random_string(randint(6, 18)) + "@test.com"
         username = get_random_string(randint(6, 18))
         password = get_random_string(randint(6, 30))
         self.fill_account_form(driver, email, username, password, password)
 
         alert_success = driver.find_element(By.CLASS_NAME, 'alert-success')
         # Checks that a new user was created
-        assert User.objects.filter(email=email,username=username).exists()
-        assert AppUser.objects.filter(user__email=email,user__username=username).exists()
+        assert User.objects.filter(email=email, username=username).exists()
+        assert AppUser.objects.filter(user__email=email, user__username=username).exists()
         assert driver.current_url == live_server.url + '/account/signup-form'
-        assert alert_success.text ==  "Account successfully created"
+        assert alert_success.text == "Account successfully created"
         self.assert_menu(driver, False)
 
     @pytest.mark.django_db
@@ -176,23 +170,23 @@ class TestsSelenium:
         'email', [
             '',
             'test@test.com',
-            get_random_string(randint(1, 8))+' '+get_random_string(randint(1, 8))+'@test.com'
+            get_random_string(randint(1, 8)) + ' ' + get_random_string(randint(1, 8)) + '@test.com'
         ]
     )
     @pytest.mark.parametrize(
         'username', [
             'test',
-            '', 
-            get_random_string(randint(1,6))+' '+get_random_string(randint(1,6))
+            '',
+            get_random_string(randint(1, 6)) + ' ' + get_random_string(randint(1, 6))
         ]
     )
     @pytest.mark.parametrize(
         'password', [
             'password',
             '',
-            get_random_string(8)+' '+get_random_string(1),
-            get_random_string(randint(1,5)),
-            get_random_string(randint(31,40))
+            get_random_string(8) + ' ' + get_random_string(1),
+            get_random_string(randint(1, 5)),
+            get_random_string(randint(31, 40))
         ]
     )
     @pytest.mark.parametrize(
@@ -201,63 +195,45 @@ class TestsSelenium:
             get_random_string(randint(6, 30))
         ]
     )
-    def test_selenium_fail_validation_signup(self, driver, live_server, email, username, password, password_confirmation):
-        """Tests several cases where the email, username and password does not respect the business constaints"""
-        if (email != 'test@test.com') or (username != 'test') or (password != 'password') or (password_confirmation != 'password'):
+    def test_selenium_fail_validation_signup(self, driver, live_server, email, username, password,
+                                             password_confirmation):
+        """Tests several cases where the email, username and password does not respect the business constraints"""
+        if (email != 'test@test.com') or (username != 'test') or (password != 'password') or (
+                password_confirmation != 'password'):
             # Fills the signup form with invalid data
             driver.get(live_server.url + "/account/signup-form")
             self.pause()
             self.fill_account_form(driver, email, username, password, password_confirmation)
 
             alerts_danger = driver.find_elements(By.CLASS_NAME, 'alert-danger')
-            
+
             assert driver.current_url == live_server.url + '/account/signup-form'
-            assert len(alerts_danger) > 0 or not(self.is_account_form_valid_in_HTML(driver))
+            assert len(alerts_danger) > 0 or not (self.is_account_form_valid_in_HTML(driver))
             self.assert_menu(driver, False)
-    
+
     @pytest.mark.django_db
-    def test_selenium_repeated_fields_signup(self, driver, live_server, create_users):
-        """Tests the signup fail due to repeated username and email"""
+    @pytest.mark.parametrize(
+        'is_repeated_username, is_repeated_email', [
+            (True, True),
+            (True, False),
+            (False, True)
+        ]
+    )
+    def test_selenium_repeated_credentials_signup(self, driver, live_server, create_users, is_repeated_username, is_repeated_email):
+        """Tests the signup fail due to repeated username and/or email"""
         users = create_users(k=randint(1, 10))
         user = users[randint(0, len(users) - 1)]
-        # Fills the signup form with repeated username and email
         driver.get(live_server.url + "/account/signup-form")
         self.pause()
+        username = user.username if is_repeated_username else get_random_string(randint(6, 18))
+        email = user.email if is_repeated_email else get_random_string(randint(6, 18)) + "@test.com"
         password = get_random_string(randint(6, 30))
-        username = user.username
-        email = user.email
         self.fill_account_form(driver, email, username, password, password)
 
         alert_danger = driver.find_element(By.CLASS_NAME, 'alert-danger')
-        
-        assert driver.current_url == live_server.url + '/account/signup-form'
-        assert alert_danger.text == "This username is not available"
-        self.assert_menu(driver, False)
-        # Fills the signup form with repeated email
-        driver.get(live_server.url + "/account/signup-form")
-        self.pause()
-        password = get_random_string(randint(6, 30))
-        username = get_random_string(randint(6, 18))
-        email = user.email
-        self.fill_account_form(driver, email, username, password, password)
 
-        alert_danger = driver.find_element(By.CLASS_NAME, 'alert-danger')
-        
         assert driver.current_url == live_server.url + '/account/signup-form'
-        assert alert_danger.text == "This email is not available"
-        self.assert_menu(driver, False)
-        # Fills the signup form with repeated username
-        driver.get(live_server.url + "/account/signup-form")
-        self.pause()
-        password = get_random_string(randint(6, 30))
-        username = user.username
-        email =  get_random_string(randint(6, 18)) + "@test.com"
-        self.fill_account_form(driver, email, username, password, password)
-
-        alert_danger = driver.find_element(By.CLASS_NAME, 'alert-danger')
-        
-        assert driver.current_url == live_server.url + '/account/signup-form'
-        assert alert_danger.text == "This username is not available"
+        assert alert_danger.text == "This username is not available" if is_repeated_username else "This email is not available"
         self.assert_menu(driver, False)
 
     @pytest.mark.django_db
@@ -284,7 +260,7 @@ class TestsSelenium:
         # Fills the update form with valid data
         driver.get(live_server.url + "/account/update-form")
         self.pause()
-        email = get_random_string(randint(6, 18))+"@test.com"
+        email = get_random_string(randint(6, 18)) + "@test.com"
         username = get_random_string(randint(6, 18))
         password = get_random_string(randint(6, 30))
         self.fill_account_form(driver, email, username, password, password)
@@ -309,23 +285,23 @@ class TestsSelenium:
         'email', [
             '',
             'test@test.com',
-            get_random_string(randint(1, 8))+' '+get_random_string(randint(1, 8))+'@test.com'
+            get_random_string(randint(1, 8)) + ' ' + get_random_string(randint(1, 8)) + '@test.com'
         ]
     )
     @pytest.mark.parametrize(
         'username', [
             'test',
-            '', 
-            get_random_string(randint(1,6))+' '+get_random_string(randint(1,6))
+            '',
+            get_random_string(randint(1, 6)) + ' ' + get_random_string(randint(1, 6))
         ]
     )
     @pytest.mark.parametrize(
         'password', [
             'password',
             '',
-            get_random_string(8)+' '+get_random_string(1),
-            get_random_string(randint(1,5)),
-            get_random_string(randint(31,40))
+            get_random_string(8) + ' ' + get_random_string(1),
+            get_random_string(randint(1, 5)),
+            get_random_string(randint(31, 40))
         ]
     )
     @pytest.mark.parametrize(
@@ -334,9 +310,11 @@ class TestsSelenium:
             get_random_string(randint(6, 30))
         ]
     )
-    def test_selenium_fail_validation_update_account(self, driver, live_server, create_users, email, username, password, password_confirmation):
+    def test_selenium_fail_validation_update_account(self, driver, live_server, create_users, email, username, password,
+                                                     password_confirmation):
         """Tests the cases where the account update fails due to a validation error"""
-        if (email != 'test@test.com') or (username != 'test') or (password != 'password') or (password_confirmation != 'password'):
+        if (email != 'test@test.com') or (username != 'test') or (password != 'password') or (
+                password_confirmation != 'password'):
             user = create_users()[0]
             self.login_user(driver, live_server, user)
             # Fills the update form with valid data
@@ -347,46 +325,37 @@ class TestsSelenium:
             alerts_danger = driver.find_elements(By.CLASS_NAME, 'alert-danger')
 
             assert driver.current_url == live_server.url + "/account/update-form"
-            assert len(alerts_danger) > 0 or not(self.is_account_form_valid_in_HTML(driver))
+            assert len(alerts_danger) > 0 or not (self.is_account_form_valid_in_HTML(driver))
             self.assert_menu(driver, True)
             # Logout user
             driver.get(live_server.url + "/account/logout")
 
     @pytest.mark.django_db
-    def test_selenium_repeated_fields_update_account(self, driver, live_server, create_users):
+    @pytest.mark.parametrize(
+        'is_repeated_username, is_repeated_email', [
+            (True, True),
+            (True, False),
+            (False, True)
+        ]
+    )
+    def test_selenium_repeated_credentials_update_account(self, driver, live_server, create_users, is_repeated_username, is_repeated_email):
         """Tests the cases where the account update fails due to a username or an email already in use"""
-        users = create_users(k=randint(2,5))
+        users = create_users(k=randint(2, 5))
         authenticated_user = users[0]
-        user = users[randint(1, len(users)-1)]
+        user = users[randint(1, len(users) - 1)]
         self.login_user(driver, live_server, authenticated_user)
         # Fills the update form with an email and a username in use
         driver.get(live_server.url + "/account/update-form")
         self.pause()
-        new_email = get_random_string(randint(6, 18))+"@test.com"
-        new_username = get_random_string(randint(6, 18))
+        email = user.email if is_repeated_email else get_random_string(randint(6, 18)) + "@test.com"
+        username = user.username if is_repeated_username else get_random_string(randint(6, 18))
         password = get_random_string(randint(6, 30))
-        self.fill_account_form(driver, user.email, user.username, password, password)
+        self.fill_account_form(driver, email, username, password, password)
 
         alert_danger = driver.find_element(By.CLASS_NAME, 'alert-danger')
 
         assert driver.current_url == live_server.url + "/account/update-form"
-        assert alert_danger.text == "This username is not available"
-        self.assert_menu(driver, True)
-        # Fills the update form with a username in use    
-        self.fill_account_form(driver, new_email, user.username, password, password)
-
-        alert_danger = driver.find_element(By.CLASS_NAME, 'alert-danger')
-
-        assert driver.current_url == live_server.url + "/account/update-form"
-        assert alert_danger.text == "This username is not available"
-        self.assert_menu(driver, True)
-        # Fills the update form with an email in use    
-        self.fill_account_form(driver, user.email, new_username, password, password)
-
-        alert_danger = driver.find_element(By.CLASS_NAME, 'alert-danger')
-
-        assert driver.current_url == live_server.url + "/account/update-form"
-        assert alert_danger.text == "This email is not available"
+        assert alert_danger.text == "This username is not available" if is_repeated_username else "This email is not available"
         self.assert_menu(driver, True)
         # Logout user
         driver.get(live_server.url + "/account/logout")
@@ -414,11 +383,13 @@ class TestsSelenium:
         assert driver.current_url == live_server.url + "/dashboard"
         assert not User.objects.filter(id=user.id).exists()
         assert not AppUser.objects.filter(user__id=user.id).exists()
+        self.assert_menu(driver, False)
 
     @pytest.mark.django_db
     @pytest.mark.parametrize('filename, is_successful', [
         ('C:\\Users\\Humberto\\Desktop\\Humberto\\Study\\WebDev\\car-controller-app\\requirements.txt', False),
-        ('C:\\Users\\Humberto\\Desktop\\Humberto\\Study\\WebDev\\car-controller-app\\application\\static\\logo.png', True),
+        ('C:\\Users\\Humberto\\Desktop\\Humberto\\Study\\WebDev\\car-controller-app\\application\\static\\logo.png',
+         True),
         (None, True)
     ])
     def test_selenium_change_picture(self, driver, live_server, create_users, filename, is_successful):
@@ -434,7 +405,7 @@ class TestsSelenium:
         submit_button = driver.find_element(By.ID, "buttonChangeProfilePicture")
         submit_button.click()
         self.pause()
-        
+
         final_profile_picture = AppUser.objects.get(user=user).picture
 
         if not is_successful:
@@ -473,7 +444,7 @@ class TestsSelenium:
         self.login_user(driver, live_server, user)
         url = live_server.url + "/account/profile"
         if game_filter is not None:
-            get_parameters = urlencode({'game': game_filter})    
+            get_parameters = urlencode({'game': game_filter})
             url = '{}?{}'.format(url, get_parameters)
         driver.get(url)
 
@@ -486,7 +457,7 @@ class TestsSelenium:
         # Testing if the user info are shown
         assert username_info.text == "Username: " + user.username
         assert email_info.text == "Email: " + user.email
-        
+
         if game_filter is not None:
             game = Game.objects.filter(game_tag=game_filter).first()
             scores = Score.objects.filter(user=user, game__game_tag=game_filter)
@@ -503,14 +474,16 @@ class TestsSelenium:
         for i in range(len(score_game_names)):
             # Checking details of each score
             assert score_game_names[i].text == scores[i].game.game_name
-            assert score_dates[i].text == scores[i].date.strftime("%Y/%m/%d %H:%M:%S %p")
+            assert score_dates[i].text == scores[i].date.strftime("%Y/%m/%d %I:%M:%S %p")
             assert score_values[i].text == str(scores[i].score)
 
         assert len(score_game_names) == len(scores)
         assert len(score_dates) == len(scores)
         assert len(score_values) == len(scores)
         self.assert_menu(driver, True)
-        
+        # Logout user
+        driver.get(live_server.url + "/account/logout")
+
     @pytest.mark.django_db
     @pytest.mark.parametrize(
         'url', [
@@ -528,7 +501,7 @@ class TestsSelenium:
         # Asserts that the user is redirected to the login form
         assert driver.current_url == live_server.url + "/account/login-form"
         self.assert_menu(driver, False)
-    
+
     @pytest.mark.django_db
     @pytest.mark.parametrize(
         'game_filter', [
@@ -542,7 +515,7 @@ class TestsSelenium:
         """Tests the game filter on the rankings page"""
         url = live_server.url + "/rankings"
         if game_filter is not None:
-            get_parameters = urlencode({'game': game_filter})    
+            get_parameters = urlencode({'game': game_filter})
             url = '{}?{}'.format(url, get_parameters)
         driver.get(url)
 
@@ -589,3 +562,32 @@ class TestsSelenium:
         assert driver.current_url == live_server.url + "/dashboard"
         assert len(greetings) == 0
         self.assert_menu(driver, False)
+
+    @pytest.mark.django_db
+    def test_selenium_no_games_rankings(self, driver, live_server):
+        """Tests the ranking page when no game is saved in the database"""
+        url = live_server.url + "/rankings"
+        driver.get(url)
+        self.pause()
+        # Tests if pressing the submit button provokes some error
+        submit_button = driver.find_element(By.CLASS_NAME, 'btn-primary')
+        submit_button.click()
+        self.pause()
+        # Verifying if we are redirected to the same page after clicking on the submit button
+        assert driver.current_url == live_server.url + "/rankings?"
+        self.assert_menu(driver, False)
+
+    @pytest.mark.django_db
+    def test_selenium_no_games_profile(self, driver, live_server, create_users):
+        """Tests the profile page when no game is saved in the database"""
+        user = create_users()[0]
+        self.login_user(driver, live_server, user)
+        driver.get(live_server + "/account/profile")
+        # Tests if pressing the submit button provokes some error
+        submit_button = driver.find_element(By.ID, 'submitButtonGameFilter')
+        submit_button.click()
+        # Verifying if we are redirected to the same page after clicking on the submit button
+        assert driver.current_url == live_server.url + "/account/profile?"
+        self.assert_menu(driver, True)
+        # Logout user
+        driver.get(live_server.url + "/account/logout")
