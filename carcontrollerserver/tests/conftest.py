@@ -105,7 +105,7 @@ def create_users():
                 password = 'strong-password'
 
             user = User.objects.create_user(username=username, email=email, password=password)
-            app_user = AppUser(user = user)
+            app_user = AppUser(user=user)
             app_user.save()
             users.append(user)
 
